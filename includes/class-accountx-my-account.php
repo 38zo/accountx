@@ -139,7 +139,9 @@ class AccountX_My_Account {
 		$email      = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 		$password   = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
 
-		if ( 'create' === $action ) {
+		if ( 'create' === $action && ! $this->settings->customers_can_create() ) {
+			$result = new WP_Error( 'accountx_customer_create_disabled', __( 'Customers are not allowed to create subaccounts.', 'accountx' ) );
+		} elseif ( 'create' === $action ) {
 			$result = $this->subaccounts->create_subaccount(
 				$parent_id,
 				$first_name,
@@ -194,9 +196,10 @@ class AccountX_My_Account {
 		$parent_id   = get_current_user_id();
 		$subaccounts = $this->subaccounts->get_subaccounts( $parent_id );
 		$label       = $this->settings->account_label();
+		$limit       = $this->settings->has_unlimited_subaccounts() ? __( 'unlimited', 'accountx' ) : (string) $this->settings->subaccount_limit();
 
 		echo '<h2>' . esc_html( $this->menu_label() ) . '</h2>';
-		echo '<p>' . esc_html( sprintf( /* translators: 1: label, 2: used count, 3: account limit. */ __( '%1$s usage: %2$d of %3$d.', 'accountx' ), $label, count( $subaccounts ), $this->settings->subaccount_limit() ) ) . '</p>';
+		echo '<p>' . esc_html( sprintf( /* translators: 1: label, 2: used count, 3: account limit. */ __( '%1$s usage: %2$d of %3$s.', 'accountx' ), $label, count( $subaccounts ), $limit ) ) . '</p>';
 
 		$this->render_create_form( $label );
 		$this->render_subaccounts_table( $subaccounts, $label );
@@ -218,6 +221,11 @@ class AccountX_My_Account {
 	 * @return void
 	 */
 	private function render_create_form( $label ) {
+		if ( ! $this->settings->customers_can_create() ) {
+			echo '<p class="woocommerce-info">' . esc_html__( 'Subaccount creation is managed by the store admin.', 'accountx' ) . '</p>';
+			return;
+		}
+
 		if ( ! $this->subaccounts->can_create_subaccount( get_current_user_id() ) ) {
 			echo '<p class="woocommerce-info">' . esc_html__( 'You have reached the subaccount limit.', 'accountx' ) . '</p>';
 			return;
@@ -272,7 +280,7 @@ class AccountX_My_Account {
 		$orders = $this->orders->get_orders_for_subaccount( $subaccount->ID );
 
 		echo '<tr>';
-		echo '<td data-title="' . esc_attr__( 'Name', 'accountx' ) . '">' . esc_html( $subaccount->display_name ) . '</td>';
+		echo '<td data-title="' . esc_attr__( 'Name', 'accountx' ) . '">' . esc_html( $this->subaccounts->get_display_name( $subaccount ) ) . '</td>';
 		echo '<td data-title="' . esc_attr__( 'Email', 'accountx' ) . '">' . esc_html( $subaccount->user_email ) . '</td>';
 		echo '<td data-title="' . esc_attr__( 'Orders', 'accountx' ) . '">';
 

@@ -91,10 +91,10 @@ final class AccountX_Plugin {
 
 		$this->settings    = new AccountX_Settings();
 		$this->subaccounts = new AccountX_Subaccounts( $this->settings );
-		$this->orders      = new AccountX_Orders( $this->subaccounts );
+		$this->orders      = new AccountX_Orders( $this->settings, $this->subaccounts );
 		$this->switching   = new AccountX_Switching( $this->settings, $this->subaccounts );
 		$this->my_account  = new AccountX_My_Account( $this->settings, $this->subaccounts, $this->orders, $this->switching );
-		$this->admin       = new AccountX_Admin( $this->settings );
+		$this->admin       = new AccountX_Admin( $this->settings, $this->subaccounts );
 	}
 
 	/**

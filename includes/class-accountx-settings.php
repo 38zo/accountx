@@ -20,10 +20,15 @@ class AccountX_Settings {
 	 */
 	public static function defaults() {
 		return array(
-			'enabled'          => 'yes',
-			'mode'             => 'multi_user',
-			'subaccount_limit' => 10,
-			'user_switching'   => 'yes',
+			'enabled'              => 'yes',
+			'mode'                 => 'multi_user',
+			'creator_access'       => 'admins_customers',
+			'subaccount_limit'     => 10,
+			'user_switching'       => 'yes',
+			'display_name_format'  => 'full_name_email',
+			'show_order_page_info' => 'yes',
+			'show_order_list_info' => 'yes',
+			'show_user_list_info'  => 'yes',
 		);
 	}
 
@@ -95,6 +100,54 @@ class AccountX_Settings {
 	 * @return int
 	 */
 	public function subaccount_limit() {
-		return max( 1, absint( $this->get( 'subaccount_limit', 10 ) ) );
+		return absint( $this->get( 'subaccount_limit', 10 ) );
+	}
+
+	/**
+	 * Is subaccount creation unlimited?
+	 *
+	 * @return bool
+	 */
+	public function has_unlimited_subaccounts() {
+		return 0 === $this->subaccount_limit();
+	}
+
+	/**
+	 * Can customers create subaccounts?
+	 *
+	 * @return bool
+	 */
+	public function customers_can_create() {
+		return in_array( $this->get( 'creator_access', 'admins_customers' ), array( 'customers', 'admins_customers' ), true );
+	}
+
+	/**
+	 * Can admins create subaccounts?
+	 *
+	 * @return bool
+	 */
+	public function admins_can_create() {
+		return in_array( $this->get( 'creator_access', 'admins_customers' ), array( 'admins', 'admins_customers' ), true );
+	}
+
+	/**
+	 * Get display name format.
+	 *
+	 * @return string
+	 */
+	public function display_name_format() {
+		$format = (string) $this->get( 'display_name_format', 'full_name_email' );
+
+		return in_array( $format, array( 'username_email', 'full_name_email', 'company_email' ), true ) ? $format : 'full_name_email';
+	}
+
+	/**
+	 * Is a display location enabled?
+	 *
+	 * @param string $key Setting key.
+	 * @return bool
+	 */
+	public function is_display_location_enabled( $key ) {
+		return 'yes' === $this->get( $key, 'yes' );
 	}
 }

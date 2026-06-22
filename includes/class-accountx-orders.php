@@ -19,11 +19,20 @@ class AccountX_Orders {
 	private $subaccounts;
 
 	/**
+	 * Settings service.
+	 *
+	 * @var AccountX_Settings
+	 */
+	private $settings;
+
+	/**
 	 * Constructor.
 	 *
+	 * @param AccountX_Settings    $settings    Settings service.
 	 * @param AccountX_Subaccounts $subaccounts Subaccounts service.
 	 */
-	public function __construct( AccountX_Subaccounts $subaccounts ) {
+	public function __construct( AccountX_Settings $settings, AccountX_Subaccounts $subaccounts ) {
+		$this->settings    = $settings;
 		$this->subaccounts = $subaccounts;
 
 		add_action( 'woocommerce_checkout_create_order', array( $this, 'store_placed_by' ), 10, 2 );
@@ -31,6 +40,11 @@ class AccountX_Orders {
 		add_action( 'woocommerce_my_account_my_orders_column_order-placed-by', array( $this, 'render_placed_by_column' ) );
 		add_filter( 'woocommerce_account_orders_columns', array( $this, 'add_placed_by_column' ) );
 		add_filter( 'user_has_cap', array( $this, 'allow_parent_to_view_subaccount_order' ), 20, 4 );
+		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'render_admin_order_info' ) );
+		add_filter( 'manage_edit-shop_order_columns', array( $this, 'add_admin_order_list_column' ), 20 );
+		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'render_classic_admin_order_list_column' ), 20, 2 );
+		add_filter( 'manage_woocommerce_page_wc-orders_columns', array( $this, 'add_admin_order_list_column' ), 20 );
+		add_action( 'manage_woocommerce_page_wc-orders_custom_column', array( $this, 'render_hpos_admin_order_list_column' ), 20, 2 );
 	}
 
 	/**
@@ -116,11 +130,11 @@ class AccountX_Orders {
 		}
 
 		if ( $this->subaccounts->is_subaccount( $placed_by ) ) {
-			echo esc_html( sprintf( /* translators: %s: subaccount display name. */ __( '%s (Subaccount)', 'accountx' ), $user->display_name ) );
+			echo esc_html( sprintf( /* translators: %s: subaccount display name. */ __( '%s (Subaccount)', 'accountx' ), $this->subaccounts->get_display_name( $user ) ) );
 			return;
 		}
 
-		echo esc_html( sprintf( /* translators: %s: parent display name. */ __( '%s (Parent)', 'accountx' ), $user->display_name ) );
+		echo esc_html( sprintf( /* translators: %s: parent display name. */ __( '%s (Parent)', 'accountx' ), $this->subaccounts->get_display_name( $user ) ) );
 	}
 
 	/**
@@ -169,5 +183,136 @@ class AccountX_Orders {
 		}
 
 		return $allcaps;
+	}
+
+	/**
+	 * Render AccountX information on the WooCommerce admin order page.
+	 *
+	 * @param WC_Order $order Order object.
+	 * @return void
+	 */
+	public function render_admin_order_info( $order ) {
+		if ( ! $this->settings->is_display_location_enabled( 'show_order_page_info' ) || ! $order instanceof WC_Order ) {
+			return;
+		}
+
+		$info = $this->get_order_relationship_label( $order );
+
+		if ( '' === $info ) {
+			return;
+		}
+
+		echo '<div class="address accountx-order-info">';
+		echo '<p><strong>' . esc_html__( 'AccountX', 'accountx' ) . ':</strong><br />' . esc_html( $info ) . '</p>';
+		echo '</div>';
+	}
+
+	/**
+	 * Add AccountX column to WooCommerce order lists.
+	 *
+	 * @param array $columns Columns.
+	 * @return array
+	 */
+	public function add_admin_order_list_column( $columns ) {
+		if ( ! $this->settings->is_display_location_enabled( 'show_order_list_info' ) ) {
+			return $columns;
+		}
+
+		$new_columns = array();
+
+		foreach ( $columns as $key => $label ) {
+			$new_columns[ $key ] = $label;
+
+			if ( in_array( $key, array( 'order_status', 'status' ), true ) ) {
+				$new_columns['accountx_order_account'] = __( 'AccountX', 'accountx' );
+			}
+		}
+
+		return $new_columns;
+	}
+
+	/**
+	 * Render classic orders list column.
+	 *
+	 * @param string $column  Column key.
+	 * @param int    $post_id Order post ID.
+	 * @return void
+	 */
+	public function render_classic_admin_order_list_column( $column, $post_id ) {
+		if ( 'accountx_order_account' !== $column || ! $this->settings->is_display_location_enabled( 'show_order_list_info' ) ) {
+			return;
+		}
+
+		echo esc_html( $this->get_order_relationship_label( wc_get_order( $post_id ) ) );
+	}
+
+	/**
+	 * Render HPOS orders list column.
+	 *
+	 * @param string   $column Column key.
+	 * @param WC_Order $order  Order object.
+	 * @return void
+	 */
+	public function render_hpos_admin_order_list_column( $column, $order ) {
+		if ( 'accountx_order_account' !== $column || ! $this->settings->is_display_location_enabled( 'show_order_list_info' ) ) {
+			return;
+		}
+
+		echo esc_html( $this->get_order_relationship_label( $order ) );
+	}
+
+	/**
+	 * Get relationship label for an order.
+	 *
+	 * @param WC_Order|false $order Order object.
+	 * @return string
+	 */
+	private function get_order_relationship_label( $order ) {
+		if ( ! $order instanceof WC_Order ) {
+			return '';
+		}
+
+		$customer_id = absint( $order->get_customer_id() );
+
+		if ( $customer_id < 1 ) {
+			return __( 'Guest order', 'accountx' );
+		}
+
+		if ( $this->subaccounts->is_subaccount( $customer_id ) ) {
+			$parent_id = $this->subaccounts->get_parent_id( $customer_id );
+			$parent    = get_user_by( 'id', $parent_id );
+
+			if ( $parent ) {
+				return sprintf(
+					/* translators: 1: subaccount display name, 2: parent display name. */
+					__( 'Placed by %1$s under %2$s', 'accountx' ),
+					$this->subaccounts->get_display_name( $customer_id ),
+					$this->subaccounts->get_display_name( $parent )
+				);
+			}
+
+			return sprintf(
+				/* translators: %s: subaccount display name. */
+				__( 'Placed by %s', 'accountx' ),
+				$this->subaccounts->get_display_name( $customer_id )
+			);
+		}
+
+		$count = $this->subaccounts->count_subaccounts( $customer_id );
+
+		if ( $count > 0 ) {
+			return sprintf(
+				/* translators: 1: parent display name, 2: subaccount count. */
+				_n( 'Parent account: %1$s (%2$d subaccount)', 'Parent account: %1$s (%2$d subaccounts)', $count, 'accountx' ),
+				$this->subaccounts->get_display_name( $customer_id ),
+				$count
+			);
+		}
+
+		return sprintf(
+			/* translators: %s: customer display name. */
+			__( 'Customer: %s', 'accountx' ),
+			$this->subaccounts->get_display_name( $customer_id )
+		);
 	}
 }

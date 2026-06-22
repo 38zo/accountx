@@ -23,9 +23,13 @@ The plugin is intentionally simple and stable. Advanced B2B features such as per
 * Parent customers can create, edit, and delete subaccounts.
 * Subaccounts are normal WordPress users with the customer role.
 * Configurable subaccount limit, defaulting to 10.
+* Use 0 for unlimited subaccounts.
+* Configure whether admins, parent customers, or both can create subaccounts.
 * Multi-User Mode and Sub-User Mode labels.
+* Configurable subaccount display name format.
 * Parent accounts can see orders placed by subaccounts.
 * My Account orders display who placed each order.
+* Optional AccountX information on WooCommerce order pages, WooCommerce order lists, and the WordPress users list.
 * Optional parent-to-subaccount user switching.
 * Minimal settings page under WooCommerce > AccountX.
 

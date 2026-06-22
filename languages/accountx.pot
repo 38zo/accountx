@@ -86,7 +86,16 @@ msgstr ""
 msgid "Team Accounts"
 msgstr ""
 
-msgid "%1$s usage: %2$d of %3$d."
+msgid "Customers are not allowed to create subaccounts."
+msgstr ""
+
+msgid "unlimited"
+msgstr ""
+
+msgid "%1$s usage: %2$d of %3$s."
+msgstr ""
+
+msgid "Subaccount creation is managed by the store admin."
 msgstr ""
 
 msgid "You have reached the subaccount limit."
@@ -179,10 +188,25 @@ msgstr ""
 msgid "Choose how subaccounts are presented to customers: team members for company accounts, or controlled subaccounts under one parent customer."
 msgstr ""
 
+msgid "Who can create subaccounts"
+msgstr ""
+
+msgid "Admins and customers"
+msgstr ""
+
+msgid "Admins only"
+msgstr ""
+
+msgid "Customers only"
+msgstr ""
+
+msgid "Choose whether store admins, parent customers, or both can create new subaccounts."
+msgstr ""
+
 msgid "Subaccount limit"
 msgstr ""
 
-msgid "Set the maximum number of subaccounts each parent customer can create."
+msgid "Set the maximum number of subaccounts each parent customer can create. Enter 0 for unlimited subaccounts."
 msgstr ""
 
 msgid "User switching"
@@ -192,4 +216,85 @@ msgid "Allow parents to switch into subaccount sessions"
 msgstr ""
 
 msgid "Adds a My Account button that lets a parent customer temporarily view the store as one of their subaccounts."
+msgstr ""
+
+msgid "Subaccount display name"
+msgstr ""
+
+msgid "Full name + email"
+msgstr ""
+
+msgid "Username + email"
+msgstr ""
+
+msgid "Company + email"
+msgstr ""
+
+msgid "Controls how parent and subaccount names appear in AccountX order and user screens. Username is used when the selected name source is empty."
+msgstr ""
+
+msgid "Subaccount information display"
+msgstr ""
+
+msgid "Show subaccount information on WooCommerce order pages"
+msgstr ""
+
+msgid "Show subaccount information in WooCommerce order lists"
+msgstr ""
+
+msgid "Show parent/subaccount information in the WordPress user list"
+msgstr ""
+
+msgid "Choose where AccountX should add parent and subaccount context for admins."
+msgstr ""
+
+msgid "Subaccount of"
+msgstr ""
+
+msgid "AccountX Subaccounts"
+msgstr ""
+
+msgid "Existing subaccounts"
+msgstr ""
+
+msgid "No subaccounts have been created for this customer."
+msgstr ""
+
+msgid "This customer has reached the subaccount limit."
+msgstr ""
+
+msgid "Enter all required fields, then click Update User to create the subaccount."
+msgstr ""
+
+msgid "You are not allowed to create subaccounts."
+msgstr ""
+
+msgid "Subaccount created successfully."
+msgstr ""
+
+msgid "Subaccount of %s"
+msgstr ""
+
+msgid "%d subaccount"
+msgstr ""
+
+msgid "%d subaccounts"
+msgstr ""
+
+msgid "Guest order"
+msgstr ""
+
+msgid "Placed by %1$s under %2$s"
+msgstr ""
+
+msgid "Placed by %s"
+msgstr ""
+
+msgid "Parent account: %1$s (%2$d subaccount)"
+msgstr ""
+
+msgid "Parent account: %1$s (%2$d subaccounts)"
+msgstr ""
+
+msgid "Customer: %s"
 msgstr ""

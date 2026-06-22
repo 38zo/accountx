@@ -96,6 +96,10 @@ class AccountX_Subaccounts {
 	 * @return bool
 	 */
 	public function can_create_subaccount( $parent_id ) {
+		if ( $this->settings->has_unlimited_subaccounts() ) {
+			return true;
+		}
+
 		return $this->count_subaccounts( $parent_id ) < $this->settings->subaccount_limit();
 	}
 
@@ -138,7 +142,7 @@ class AccountX_Subaccounts {
 				'user_pass'    => $password,
 				'first_name'   => $first_name,
 				'last_name'    => $last_name,
-				'display_name' => trim( $first_name . ' ' . $last_name ),
+				'display_name' => $this->format_display_name_from_values( $email, $email, $first_name, $last_name, '' ),
 				'role'         => 'customer',
 			)
 		);
@@ -184,9 +188,14 @@ class AccountX_Subaccounts {
 			'user_email'   => $email,
 			'first_name'   => sanitize_text_field( $first_name ),
 			'last_name'    => sanitize_text_field( $last_name ),
-			'display_name' => trim( sanitize_text_field( $first_name ) . ' ' . sanitize_text_field( $last_name ) ),
 			'role'         => 'customer',
 		);
+
+		$user = get_userdata( $subaccount_id );
+
+		if ( $user ) {
+			$data['display_name'] = $this->format_display_name_from_values( $user->user_login, $email, $first_name, $last_name, get_user_meta( $subaccount_id, 'billing_company', true ) );
+		}
 
 		if ( '' !== $password ) {
 			if ( strlen( $password ) < 8 ) {
@@ -217,6 +226,65 @@ class AccountX_Subaccounts {
 		wp_delete_user( absint( $subaccount_id ) );
 
 		return true;
+	}
+
+	/**
+	 * Format a user name for AccountX displays.
+	 *
+	 * @param int|WP_User $user User ID or user object.
+	 * @return string
+	 */
+	public function get_display_name( $user ) {
+		$user = $user instanceof WP_User ? $user : get_user_by( 'id', absint( $user ) );
+
+		if ( ! $user ) {
+			return __( 'Unknown', 'accountx' );
+		}
+
+		$company = get_user_meta( $user->ID, 'billing_company', true );
+
+		if ( '' === $company ) {
+			$company = get_user_meta( $user->ID, 'shipping_company', true );
+		}
+
+		return $this->format_display_name_from_values(
+			$user->user_login,
+			$user->user_email,
+			get_user_meta( $user->ID, 'first_name', true ),
+			get_user_meta( $user->ID, 'last_name', true ),
+			$company
+		);
+	}
+
+	/**
+	 * Format display name from raw values.
+	 *
+	 * @param string $username   Username.
+	 * @param string $email      Email address.
+	 * @param string $first_name First name.
+	 * @param string $last_name  Last name.
+	 * @param string $company    Company.
+	 * @return string
+	 */
+	private function format_display_name_from_values( $username, $email, $first_name, $last_name, $company ) {
+		$username  = sanitize_user( $username, true );
+		$email     = sanitize_email( $email );
+		$full_name = trim( sanitize_text_field( $first_name ) . ' ' . sanitize_text_field( $last_name ) );
+		$company   = sanitize_text_field( $company );
+
+		if ( 'username_email' === $this->settings->display_name_format() ) {
+			$name = $username;
+		} elseif ( 'company_email' === $this->settings->display_name_format() ) {
+			$name = '' !== $company ? $company : $username;
+		} else {
+			$name = '' !== $full_name ? $full_name : $username;
+		}
+
+		if ( '' !== $email ) {
+			return sprintf( '%1$s (%2$s)', $name, $email );
+		}
+
+		return $name;
 	}
 
 	/**
