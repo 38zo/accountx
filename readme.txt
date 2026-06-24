@@ -50,6 +50,10 @@ No. Subaccounts are regular WordPress users with the WooCommerce customer role.
 
 No. Only parent accounts can manage their own subaccounts.
 
+== Screenshots ==
+
+1. Accountx settings Page.
+
 == Upgrade Notice ==
 
 = 0.1.0 =
