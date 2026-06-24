@@ -1,4 +1,4 @@
-=== AccountX - Teams & Subaccounts for WooCommerce ===
+=== AccountX ===
 Contributors: 38zo
 Tags: woocommerce, b2b, subaccounts, customer accounts, teams
 Requires at least: 6.2
