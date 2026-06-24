@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: AccountX - Teams & Subaccounts for WooCommerce
- * Plugin URI:  https://github.com/Frenziecodes/accountx
+ * Plugin URI:  https://github.com/38zo/accountx
  * Description: Turn WooCommerce customer accounts into team accounts with lightweight subaccount management.
  * Version:     0.1.0
- * Author:      Lewisushindi
- * Author URI:  https://github.com/Frenziecodes/
+ * Author:      38zo
+ * Author URI:  https://github.com/38zo
  * Text Domain: accountx
  * Domain Path: /languages
  * License: GPL-3.0-or-later
