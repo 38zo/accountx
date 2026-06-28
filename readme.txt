@@ -1,5 +1,5 @@
 === Customer Subaccounts for WooCommerce ===
-Contributors: 38zo
+Contributors: lewisushindi
 Tags: woocommerce, subaccounts, b2b, customer accounts, teams
 Requires at least: 6.2
 Tested up to: 7.0
