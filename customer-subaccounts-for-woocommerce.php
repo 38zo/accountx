@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: AccountX
- * Plugin URI:  https://github.com/38zo/accountx
+ * Plugin Name: Customer Subaccounts for WooCommerce
+ * Plugin URI:  https://github.com/38zo/customer-subaccounts-for-woocommerce
  * Description: Turn WooCommerce customer accounts into team accounts with lightweight subaccount management.
  * Version:     1.0.0
  * Author:      38zo
  * Author URI:  https://github.com/38zo
- * Text Domain: accountx
+ * Text Domain: customer-subaccounts-for-woocommerce
  * Domain Path: /languages
  * License: GPL-3.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -15,19 +15,19 @@
  * WC requires at least: 7.0
  * WC tested up to: 9.9
  *
- * @package AccountX
+ * @package Customer Subaccounts for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'ACCOUNTX_VERSION', '1.0.0' );
-define( 'ACCOUNTX_FILE', __FILE__ );
-define( 'ACCOUNTX_PATH', plugin_dir_path( __FILE__ ) );
-define( 'ACCOUNTX_URL', plugin_dir_url( __FILE__ ) );
+define( 'CSFW_VERSION', '1.0.0' );
+define( 'CSFW_FILE', __FILE__ );
+define( 'CSFW_PATH', plugin_dir_path( __FILE__ ) );
+define( 'CSFW_URL', plugin_dir_url( __FILE__ ) );
 
-require_once ACCOUNTX_PATH . 'includes/class-accountx-plugin.php';
+require_once CSFW_PATH . 'includes/class-csfw-plugin.php';
 
-register_activation_hook( __FILE__, array( 'AccountX_Plugin', 'activate' ) );
+register_activation_hook( __FILE__, array( 'CSFW_Plugin', 'activate' ) );
 
 add_action(
 	'before_woocommerce_init',
@@ -38,4 +38,4 @@ add_action(
 	}
 );
 
-add_action( 'plugins_loaded', array( 'AccountX_Plugin', 'instance' ) );
+add_action( 'plugins_loaded', array( 'CSFW_Plugin', 'instance' ) );

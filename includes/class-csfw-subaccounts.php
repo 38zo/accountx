@@ -2,7 +2,7 @@
 /**
  * Subaccount service.
  *
- * @package AccountX
+ * @package Customer Subaccounts for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,22 +10,22 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Manage parent/subaccount relationships.
  */
-class AccountX_Subaccounts {
-	const META_PARENT_ID = '_accountx_parent_user_id';
+class CSFW_Subaccounts {
+	const META_PARENT_ID = '_csfw_parent_user_id';
 
 	/**
 	 * Settings.
 	 *
-	 * @var AccountX_Settings
+	 * @var CSFW_Settings
 	 */
 	private $settings;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param AccountX_Settings $settings Settings service.
+	 * @param CSFW_Settings $settings Settings service.
 	 */
-	public function __construct( AccountX_Settings $settings ) {
+	public function __construct( CSFW_Settings $settings ) {
 		$this->settings = $settings;
 
 		add_action( 'admin_init', array( $this, 'block_subaccount_admin' ) );
@@ -71,7 +71,7 @@ class AccountX_Subaccounts {
 	public function get_subaccounts( $parent_id ) {
 		return get_users(
 			array(
-				'meta_key'   => self::META_PARENT_ID, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Parent/subaccount ownership is stored as user meta in the MVP.
+				'meta_key'   => self::META_PARENT_ID, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Parent/subaccount ownership is stored as user meta.
 				'meta_value' => absint( $parent_id ), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Query is scoped to one parent account and capped by the configured subaccount limit.
 				'orderby'    => 'registered',
 				'order'      => 'ASC',
@@ -120,19 +120,19 @@ class AccountX_Subaccounts {
 		$email      = sanitize_email( $email );
 
 		if ( ! $this->can_create_subaccount( $parent_id ) ) {
-			return new WP_Error( 'accountx_limit_reached', __( 'Subaccount limit reached.', 'accountx' ) );
+			return new WP_Error( 'csfw_limit_reached', __( 'Subaccount limit reached.', 'customer-subaccounts-for-woocommerce' ) );
 		}
 
 		if ( ! is_email( $email ) ) {
-			return new WP_Error( 'accountx_invalid_email', __( 'Please enter a valid email address.', 'accountx' ) );
+			return new WP_Error( 'csfw_invalid_email', __( 'Please enter a valid email address.', 'customer-subaccounts-for-woocommerce' ) );
 		}
 
 		if ( email_exists( $email ) ) {
-			return new WP_Error( 'accountx_email_exists', __( 'A user with this email address already exists.', 'accountx' ) );
+			return new WP_Error( 'csfw_email_exists', __( 'A user with this email address already exists.', 'customer-subaccounts-for-woocommerce' ) );
 		}
 
 		if ( empty( $password ) || strlen( $password ) < 8 ) {
-			return new WP_Error( 'accountx_short_password', __( 'Password must be at least 8 characters long.', 'accountx' ) );
+			return new WP_Error( 'csfw_short_password', __( 'Password must be at least 8 characters long.', 'customer-subaccounts-for-woocommerce' ) );
 		}
 
 		$user_id = wp_insert_user(
@@ -169,18 +169,18 @@ class AccountX_Subaccounts {
 	 */
 	public function update_subaccount( $parent_id, $subaccount_id, $first_name, $last_name, $email, $password = '' ) {
 		if ( ! $this->parent_owns_subaccount( $parent_id, $subaccount_id ) ) {
-			return new WP_Error( 'accountx_forbidden', __( 'You cannot edit this subaccount.', 'accountx' ) );
+			return new WP_Error( 'csfw_forbidden', __( 'You cannot edit this subaccount.', 'customer-subaccounts-for-woocommerce' ) );
 		}
 
 		$email         = sanitize_email( $email );
 		$existing_user = get_user_by( 'email', $email );
 
 		if ( ! is_email( $email ) ) {
-			return new WP_Error( 'accountx_invalid_email', __( 'Please enter a valid email address.', 'accountx' ) );
+			return new WP_Error( 'csfw_invalid_email', __( 'Please enter a valid email address.', 'customer-subaccounts-for-woocommerce' ) );
 		}
 
 		if ( $existing_user && absint( $existing_user->ID ) !== absint( $subaccount_id ) ) {
-			return new WP_Error( 'accountx_email_exists', __( 'A user with this email address already exists.', 'accountx' ) );
+			return new WP_Error( 'csfw_email_exists', __( 'A user with this email address already exists.', 'customer-subaccounts-for-woocommerce' ) );
 		}
 
 		$data = array(
@@ -199,7 +199,7 @@ class AccountX_Subaccounts {
 
 		if ( '' !== $password ) {
 			if ( strlen( $password ) < 8 ) {
-				return new WP_Error( 'accountx_short_password', __( 'Password must be at least 8 characters long.', 'accountx' ) );
+				return new WP_Error( 'csfw_short_password', __( 'Password must be at least 8 characters long.', 'customer-subaccounts-for-woocommerce' ) );
 			}
 
 			$data['user_pass'] = $password;
@@ -219,7 +219,7 @@ class AccountX_Subaccounts {
 	 */
 	public function delete_subaccount( $parent_id, $subaccount_id ) {
 		if ( ! $this->parent_owns_subaccount( $parent_id, $subaccount_id ) ) {
-			return new WP_Error( 'accountx_forbidden', __( 'You cannot delete this subaccount.', 'accountx' ) );
+			return new WP_Error( 'csfw_forbidden', __( 'You cannot delete this subaccount.', 'customer-subaccounts-for-woocommerce' ) );
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/user.php';
@@ -229,7 +229,7 @@ class AccountX_Subaccounts {
 	}
 
 	/**
-	 * Format a user name for AccountX displays.
+	 * Format a user name for Customer Subaccounts for WooCommerce displays.
 	 *
 	 * @param int|WP_User $user User ID or user object.
 	 * @return string
@@ -238,7 +238,7 @@ class AccountX_Subaccounts {
 		$user = $user instanceof WP_User ? $user : get_user_by( 'id', absint( $user ) );
 
 		if ( ! $user ) {
-			return __( 'Unknown', 'accountx' );
+			return __( 'Unknown', 'customer-subaccounts-for-woocommerce' );
 		}
 
 		$company = get_user_meta( $user->ID, 'billing_company', true );

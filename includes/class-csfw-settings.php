@@ -2,16 +2,16 @@
 /**
  * Settings service.
  *
- * @package AccountX
+ * @package Customer Subaccounts for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * AccountX settings wrapper.
+ * Customer Subaccounts for WooCommerce settings wrapper.
  */
-class AccountX_Settings {
-	const OPTION_NAME = 'accountx_settings';
+class CSFW_Settings {
+	const OPTION_NAME = 'customer_subaccounts_for_woocommerce_settings';
 
 	/**
 	 * Default settings.
@@ -57,7 +57,7 @@ class AccountX_Settings {
 	}
 
 	/**
-	 * Is AccountX enabled?
+	 * Is Customer Subaccounts for WooCommerce enabled?
 	 *
 	 * @return bool
 	 */
@@ -91,7 +91,7 @@ class AccountX_Settings {
 	 * @return string
 	 */
 	public function account_label() {
-		return 'sub_user' === $this->mode() ? __( 'Subaccount', 'accountx' ) : __( 'Team Member', 'accountx' );
+		return 'sub_user' === $this->mode() ? __( 'Subaccount', 'customer-subaccounts-for-woocommerce' ) : __( 'Team Member', 'customer-subaccounts-for-woocommerce' );
 	}
 
 	/**

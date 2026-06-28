@@ -1,17 +1,17 @@
-# Copyright (C) 2026 AccountX
+# Copyright (C) 2026 Customer Subaccounts for WooCommerce
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: AccountX - Teams & Subaccounts for WooCommerce 0.1.0\n"
-"Report-Msgid-Bugs-To: https://example.com/accountx\n"
+"Project-Id-Version: Customer Subaccounts for WooCommerce - Teams & Subaccounts for WooCommerce 0.1.0\n"
+"Report-Msgid-Bugs-To: https://example.com/customer-subaccounts-for-woocommerce\n"
 "POT-Creation-Date: 2026-06-22 00:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: AccountX\n"
-"X-Domain: accountx\n"
+"X-Generator: Customer Subaccounts for WooCommerce\n"
+"X-Domain: customer-subaccounts-for-woocommerce\n"
 
-msgid "AccountX requires WooCommerce to be installed and active."
+msgid "Customer Subaccounts for WooCommerce requires WooCommerce to be installed and active."
 msgstr ""
 
 msgid "Subaccount"
@@ -155,13 +155,13 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-msgid "AccountX"
+msgid "Customer Subaccounts for WooCommerce"
 msgstr ""
 
-msgid "AccountX Settings"
+msgid "Customer Subaccounts for WooCommerce Settings"
 msgstr ""
 
-msgid "AccountX - Teams & Subaccounts"
+msgid "Customer Subaccounts for WooCommerce - Teams & Subaccounts"
 msgstr ""
 
 msgid "Turn WooCommerce customer accounts into team accounts."
@@ -182,7 +182,7 @@ msgstr ""
 msgid "Sub-User Mode"
 msgstr ""
 
-msgid "Show the AccountX menu in WooCommerce My Account and allow parent customers to manage subaccounts."
+msgid "Show the Customer Subaccounts for WooCommerce menu in WooCommerce My Account and allow parent customers to manage subaccounts."
 msgstr ""
 
 msgid "Choose how subaccounts are presented to customers: team members for company accounts, or controlled subaccounts under one parent customer."
@@ -230,7 +230,7 @@ msgstr ""
 msgid "Company + email"
 msgstr ""
 
-msgid "Controls how parent and subaccount names appear in AccountX order and user screens. Username is used when the selected name source is empty."
+msgid "Controls how parent and subaccount names appear in Customer Subaccounts for WooCommerce order and user screens. Username is used when the selected name source is empty."
 msgstr ""
 
 msgid "Subaccount information display"
@@ -245,13 +245,13 @@ msgstr ""
 msgid "Show parent/subaccount information in the WordPress user list"
 msgstr ""
 
-msgid "Choose where AccountX should add parent and subaccount context for admins."
+msgid "Choose where Customer Subaccounts for WooCommerce should add parent and subaccount context for admins."
 msgstr ""
 
 msgid "Subaccount of"
 msgstr ""
 
-msgid "AccountX Subaccounts"
+msgid "Customer Subaccounts for WooCommerce Subaccounts"
 msgstr ""
 
 msgid "Existing subaccounts"

@@ -2,36 +2,36 @@
 /**
  * Order visibility helpers.
  *
- * @package AccountX
+ * @package Customer Subaccounts for WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * AccountX order service.
+ * Customer Subaccounts for WooCommerce order service.
  */
-class AccountX_Orders {
+class CSFW_Orders {
 	/**
 	 * Subaccounts service.
 	 *
-	 * @var AccountX_Subaccounts
+	 * @var CSFW_Subaccounts
 	 */
 	private $subaccounts;
 
 	/**
 	 * Settings service.
 	 *
-	 * @var AccountX_Settings
+	 * @var CSFW_Settings
 	 */
 	private $settings;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param AccountX_Settings    $settings    Settings service.
-	 * @param AccountX_Subaccounts $subaccounts Subaccounts service.
+	 * @param CSFW_Settings    $settings    Settings service.
+	 * @param CSFW_Subaccounts $subaccounts Subaccounts service.
 	 */
-	public function __construct( AccountX_Settings $settings, AccountX_Subaccounts $subaccounts ) {
+	public function __construct( CSFW_Settings $settings, CSFW_Subaccounts $subaccounts ) {
 		$this->settings    = $settings;
 		$this->subaccounts = $subaccounts;
 
@@ -60,8 +60,8 @@ class AccountX_Orders {
 		$user_id = get_current_user_id();
 
 		if ( $user_id > 0 ) {
-			$order->update_meta_data( '_accountx_placed_by_user_id', $user_id );
-			$order->update_meta_data( '_accountx_parent_user_id', $this->subaccounts->get_parent_id( $user_id ) );
+			$order->update_meta_data( '_csfw_placed_by_user_id', $user_id );
+			$order->update_meta_data( '_csfw_parent_user_id', $this->subaccounts->get_parent_id( $user_id ) );
 		}
 	}
 
@@ -102,7 +102,7 @@ class AccountX_Orders {
 			$new_columns[ $key ] = $label;
 
 			if ( 'order-date' === $key ) {
-				$new_columns['order-placed-by'] = __( 'Placed by', 'accountx' );
+				$new_columns['order-placed-by'] = __( 'Placed by', 'customer-subaccounts-for-woocommerce' );
 			}
 		}
 
@@ -116,7 +116,7 @@ class AccountX_Orders {
 	 * @return void
 	 */
 	public function render_placed_by_column( $order ) {
-		$placed_by = absint( $order->get_meta( '_accountx_placed_by_user_id' ) );
+		$placed_by = absint( $order->get_meta( '_csfw_placed_by_user_id' ) );
 
 		if ( ! $placed_by ) {
 			$placed_by = absint( $order->get_customer_id() );
@@ -125,16 +125,16 @@ class AccountX_Orders {
 		$user = get_user_by( 'id', $placed_by );
 
 		if ( ! $user ) {
-			esc_html_e( 'Unknown', 'accountx' );
+			esc_html_e( 'Unknown', 'customer-subaccounts-for-woocommerce' );
 			return;
 		}
 
 		if ( $this->subaccounts->is_subaccount( $placed_by ) ) {
-			echo esc_html( sprintf( /* translators: %s: subaccount display name. */ __( '%s (Subaccount)', 'accountx' ), $this->subaccounts->get_display_name( $user ) ) );
+			echo esc_html( sprintf( /* translators: %s: subaccount display name. */ __( '%s (Subaccount)', 'customer-subaccounts-for-woocommerce' ), $this->subaccounts->get_display_name( $user ) ) );
 			return;
 		}
 
-		echo esc_html( sprintf( /* translators: %s: parent display name. */ __( '%s (Parent)', 'accountx' ), $this->subaccounts->get_display_name( $user ) ) );
+		echo esc_html( sprintf( /* translators: %s: parent display name. */ __( '%s (Parent)', 'customer-subaccounts-for-woocommerce' ), $this->subaccounts->get_display_name( $user ) ) );
 	}
 
 	/**
@@ -186,7 +186,7 @@ class AccountX_Orders {
 	}
 
 	/**
-	 * Render AccountX information on the WooCommerce admin order page.
+	 * Render Customer Subaccounts for WooCommerce information on the WooCommerce admin order page.
 	 *
 	 * @param WC_Order $order Order object.
 	 * @return void
@@ -202,13 +202,13 @@ class AccountX_Orders {
 			return;
 		}
 
-		echo '<div class="address accountx-order-info">';
-		echo '<p><strong>' . esc_html__( 'AccountX', 'accountx' ) . ':</strong><br />' . esc_html( $info ) . '</p>';
+		echo '<div class="address csfw-order-info">';
+		echo '<p><strong>' . esc_html__( 'Customer Subaccounts for WooCommerce', 'customer-subaccounts-for-woocommerce' ) . ':</strong><br />' . esc_html( $info ) . '</p>';
 		echo '</div>';
 	}
 
 	/**
-	 * Add AccountX column to WooCommerce order lists.
+	 * Add Customer Subaccounts for WooCommerce column to WooCommerce order lists.
 	 *
 	 * @param array $columns Columns.
 	 * @return array
@@ -224,7 +224,7 @@ class AccountX_Orders {
 			$new_columns[ $key ] = $label;
 
 			if ( in_array( $key, array( 'order_status', 'status' ), true ) ) {
-				$new_columns['accountx_order_account'] = __( 'AccountX', 'accountx' );
+				$new_columns['csfw_order_account'] = __( 'Customer Subaccounts for WooCommerce', 'customer-subaccounts-for-woocommerce' );
 			}
 		}
 
@@ -239,7 +239,7 @@ class AccountX_Orders {
 	 * @return void
 	 */
 	public function render_classic_admin_order_list_column( $column, $post_id ) {
-		if ( 'accountx_order_account' !== $column || ! $this->settings->is_display_location_enabled( 'show_order_list_info' ) ) {
+		if ( 'csfw_order_account' !== $column || ! $this->settings->is_display_location_enabled( 'show_order_list_info' ) ) {
 			return;
 		}
 
@@ -254,7 +254,7 @@ class AccountX_Orders {
 	 * @return void
 	 */
 	public function render_hpos_admin_order_list_column( $column, $order ) {
-		if ( 'accountx_order_account' !== $column || ! $this->settings->is_display_location_enabled( 'show_order_list_info' ) ) {
+		if ( 'csfw_order_account' !== $column || ! $this->settings->is_display_location_enabled( 'show_order_list_info' ) ) {
 			return;
 		}
 
@@ -275,7 +275,7 @@ class AccountX_Orders {
 		$customer_id = absint( $order->get_customer_id() );
 
 		if ( $customer_id < 1 ) {
-			return __( 'Guest order', 'accountx' );
+			return __( 'Guest order', 'customer-subaccounts-for-woocommerce' );
 		}
 
 		if ( $this->subaccounts->is_subaccount( $customer_id ) ) {
@@ -285,7 +285,7 @@ class AccountX_Orders {
 			if ( $parent ) {
 				return sprintf(
 					/* translators: 1: subaccount display name, 2: parent display name. */
-					__( 'Placed by %1$s under %2$s', 'accountx' ),
+					__( 'Placed by %1$s under %2$s', 'customer-subaccounts-for-woocommerce' ),
 					$this->subaccounts->get_display_name( $customer_id ),
 					$this->subaccounts->get_display_name( $parent )
 				);
@@ -293,7 +293,7 @@ class AccountX_Orders {
 
 			return sprintf(
 				/* translators: %s: subaccount display name. */
-				__( 'Placed by %s', 'accountx' ),
+				__( 'Placed by %s', 'customer-subaccounts-for-woocommerce' ),
 				$this->subaccounts->get_display_name( $customer_id )
 			);
 		}
@@ -303,7 +303,7 @@ class AccountX_Orders {
 		if ( $count > 0 ) {
 			return sprintf(
 				/* translators: 1: parent display name, 2: subaccount count. */
-				_n( 'Parent account: %1$s (%2$d subaccount)', 'Parent account: %1$s (%2$d subaccounts)', $count, 'accountx' ),
+				_n( 'Parent account: %1$s (%2$d subaccount)', 'Parent account: %1$s (%2$d subaccounts)', $count, 'customer-subaccounts-for-woocommerce' ),
 				$this->subaccounts->get_display_name( $customer_id ),
 				$count
 			);
@@ -311,7 +311,7 @@ class AccountX_Orders {
 
 		return sprintf(
 			/* translators: %s: customer display name. */
-			__( 'Customer: %s', 'accountx' ),
+			__( 'Customer: %s', 'customer-subaccounts-for-woocommerce' ),
 			$this->subaccounts->get_display_name( $customer_id )
 		);
 	}

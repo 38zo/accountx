@@ -1,10 +1,10 @@
 <?php
 /**
- * AccountX uninstall cleanup.
+ * Customer Subaccounts for WooCommerce uninstall cleanup.
  *
- * @package AccountX
+ * @package Customer Subaccounts for WooCommerce
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-delete_option( 'accountx_settings' );
+delete_option( 'customer_subaccounts_for_woocommerce_settings' );
