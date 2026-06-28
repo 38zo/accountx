@@ -71,7 +71,8 @@ class CSFW_Subaccounts {
 	public function get_subaccounts( $parent_id ) {
 		return get_users(
 			array(
-				'meta_key'   => self::META_PARENT_ID, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Parent/subaccount ownership is stored as user meta.
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Parent/subaccount ownership is stored as user meta.
+				'meta_key'   => self::META_PARENT_ID,
 				'meta_value' => absint( $parent_id ), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Query is scoped to one parent account and capped by the configured subaccount limit.
 				'orderby'    => 'registered',
 				'order'      => 'ASC',
