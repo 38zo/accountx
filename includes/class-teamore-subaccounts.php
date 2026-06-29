@@ -2,7 +2,7 @@
 /**
  * Subaccount service.
  *
- * @package Customer Subaccounts for WooCommerce
+ * @package TeaMore
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -10,22 +10,22 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Manage parent/subaccount relationships.
  */
-class CSFW_Subaccounts {
-	const META_PARENT_ID = '_csfw_parent_user_id';
+class Teamore_Subaccounts {
+	const META_PARENT_ID = '_teamore_parent_user_id';
 
 	/**
 	 * Settings.
 	 *
-	 * @var CSFW_Settings
+	 * @var Teamore_Settings
 	 */
 	private $settings;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param CSFW_Settings $settings Settings service.
+	 * @param Teamore_Settings $settings Settings service.
 	 */
-	public function __construct( CSFW_Settings $settings ) {
+	public function __construct( Teamore_Settings $settings ) {
 		$this->settings = $settings;
 
 		add_action( 'admin_init', array( $this, 'block_subaccount_admin' ) );
@@ -121,19 +121,19 @@ class CSFW_Subaccounts {
 		$email      = sanitize_email( $email );
 
 		if ( ! $this->can_create_subaccount( $parent_id ) ) {
-			return new WP_Error( 'csfw_limit_reached', __( 'Subaccount limit reached.', 'customer-subaccounts-for-woocommerce' ) );
+			return new WP_Error( 'teamore_limit_reached', __( 'Subaccount limit reached.', 'teamore' ) );
 		}
 
 		if ( ! is_email( $email ) ) {
-			return new WP_Error( 'csfw_invalid_email', __( 'Please enter a valid email address.', 'customer-subaccounts-for-woocommerce' ) );
+			return new WP_Error( 'teamore_invalid_email', __( 'Please enter a valid email address.', 'teamore' ) );
 		}
 
 		if ( email_exists( $email ) ) {
-			return new WP_Error( 'csfw_email_exists', __( 'A user with this email address already exists.', 'customer-subaccounts-for-woocommerce' ) );
+			return new WP_Error( 'teamore_email_exists', __( 'A user with this email address already exists.', 'teamore' ) );
 		}
 
 		if ( empty( $password ) || strlen( $password ) < 8 ) {
-			return new WP_Error( 'csfw_short_password', __( 'Password must be at least 8 characters long.', 'customer-subaccounts-for-woocommerce' ) );
+			return new WP_Error( 'teamore_short_password', __( 'Password must be at least 8 characters long.', 'teamore' ) );
 		}
 
 		$user_id = wp_insert_user(
@@ -170,18 +170,18 @@ class CSFW_Subaccounts {
 	 */
 	public function update_subaccount( $parent_id, $subaccount_id, $first_name, $last_name, $email, $password = '' ) {
 		if ( ! $this->parent_owns_subaccount( $parent_id, $subaccount_id ) ) {
-			return new WP_Error( 'csfw_forbidden', __( 'You cannot edit this subaccount.', 'customer-subaccounts-for-woocommerce' ) );
+			return new WP_Error( 'teamore_forbidden', __( 'You cannot edit this subaccount.', 'teamore' ) );
 		}
 
 		$email         = sanitize_email( $email );
 		$existing_user = get_user_by( 'email', $email );
 
 		if ( ! is_email( $email ) ) {
-			return new WP_Error( 'csfw_invalid_email', __( 'Please enter a valid email address.', 'customer-subaccounts-for-woocommerce' ) );
+			return new WP_Error( 'teamore_invalid_email', __( 'Please enter a valid email address.', 'teamore' ) );
 		}
 
 		if ( $existing_user && absint( $existing_user->ID ) !== absint( $subaccount_id ) ) {
-			return new WP_Error( 'csfw_email_exists', __( 'A user with this email address already exists.', 'customer-subaccounts-for-woocommerce' ) );
+			return new WP_Error( 'teamore_email_exists', __( 'A user with this email address already exists.', 'teamore' ) );
 		}
 
 		$data = array(
@@ -200,7 +200,7 @@ class CSFW_Subaccounts {
 
 		if ( '' !== $password ) {
 			if ( strlen( $password ) < 8 ) {
-				return new WP_Error( 'csfw_short_password', __( 'Password must be at least 8 characters long.', 'customer-subaccounts-for-woocommerce' ) );
+				return new WP_Error( 'teamore_short_password', __( 'Password must be at least 8 characters long.', 'teamore' ) );
 			}
 
 			$data['user_pass'] = $password;
@@ -220,7 +220,7 @@ class CSFW_Subaccounts {
 	 */
 	public function delete_subaccount( $parent_id, $subaccount_id ) {
 		if ( ! $this->parent_owns_subaccount( $parent_id, $subaccount_id ) ) {
-			return new WP_Error( 'csfw_forbidden', __( 'You cannot delete this subaccount.', 'customer-subaccounts-for-woocommerce' ) );
+			return new WP_Error( 'teamore_forbidden', __( 'You cannot delete this subaccount.', 'teamore' ) );
 		}
 
 		require_once ABSPATH . 'wp-admin/includes/user.php';
@@ -230,7 +230,7 @@ class CSFW_Subaccounts {
 	}
 
 	/**
-	 * Format a user name for Customer Subaccounts for WooCommerce displays.
+	 * Format a user name for TeaMore displays.
 	 *
 	 * @param int|WP_User $user User ID or user object.
 	 * @return string
@@ -239,7 +239,7 @@ class CSFW_Subaccounts {
 		$user = $user instanceof WP_User ? $user : get_user_by( 'id', absint( $user ) );
 
 		if ( ! $user ) {
-			return __( 'Unknown', 'customer-subaccounts-for-woocommerce' );
+			return __( 'Unknown', 'teamore' );
 		}
 
 		$company = get_user_meta( $user->ID, 'billing_company', true );

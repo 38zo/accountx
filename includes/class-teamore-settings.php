@@ -2,16 +2,16 @@
 /**
  * Settings service.
  *
- * @package Customer Subaccounts for WooCommerce
+ * @package TeaMore
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Customer Subaccounts for WooCommerce settings wrapper.
+ * TeaMore settings wrapper.
  */
-class CSFW_Settings {
-	const OPTION_NAME = 'customer_subaccounts_for_woocommerce_settings';
+class Teamore_Settings {
+	const OPTION_NAME = 'teamore_settings';
 
 	/**
 	 * Default settings.
@@ -57,7 +57,7 @@ class CSFW_Settings {
 	}
 
 	/**
-	 * Is Customer Subaccounts for WooCommerce enabled?
+	 * Is TeaMore enabled?
 	 *
 	 * @return bool
 	 */
@@ -91,7 +91,7 @@ class CSFW_Settings {
 	 * @return string
 	 */
 	public function account_label() {
-		return 'sub_user' === $this->mode() ? __( 'Subaccount', 'customer-subaccounts-for-woocommerce' ) : __( 'Team Member', 'customer-subaccounts-for-woocommerce' );
+		return 'sub_user' === $this->mode() ? __( 'Subaccount', 'teamore' ) : __( 'Team Member', 'teamore' );
 	}
 
 	/**

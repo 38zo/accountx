@@ -1,10 +1,10 @@
 <?php
 /**
- * Customer Subaccounts for WooCommerce uninstall cleanup.
+ * TeaMore uninstall cleanup.
  *
- * @package Customer Subaccounts for WooCommerce
+ * @package TeaMore
  */
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
-delete_option( 'customer_subaccounts_for_woocommerce_settings' );
+delete_option( 'teamore_settings' );

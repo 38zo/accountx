@@ -1,13 +1,14 @@
 <?php
 /**
- * Plugin Name: Customer Subaccounts for WooCommerce
- * Plugin URI:  https://github.com/Frenziecodes/customer-subaccounts-for-woocommerce
+ * Plugin Name: TeaMore
+ * Plugin URI:  https://github.com/Frenziecodes/teamore
  * Description: Turn WooCommerce customer accounts into team accounts with lightweight subaccount management.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      lewisushindi
  * Author URI:  https://github.com/frenziecodes
- * Text Domain: customer-subaccounts-for-woocommerce
+ * Text Domain: teamore
  * Domain Path: /languages
+ * Requires Plugins: woocommerce
  * License: GPL-3.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Requires PHP: 7.4
@@ -15,19 +16,19 @@
  * WC requires at least: 7.0
  * WC tested up to: 9.9
  *
- * @package Customer Subaccounts for WooCommerce
+ * @package TeaMore
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'CSFW_VERSION', '1.0.0' );
-define( 'CSFW_FILE', __FILE__ );
-define( 'CSFW_PATH', plugin_dir_path( __FILE__ ) );
-define( 'CSFW_URL', plugin_dir_url( __FILE__ ) );
+define( 'TEAMORE_VERSION', '1.0.1' );
+define( 'TEAMORE_FILE', __FILE__ );
+define( 'TEAMORE_PATH', plugin_dir_path( __FILE__ ) );
+define( 'TEAMORE_URL', plugin_dir_url( __FILE__ ) );
 
-require_once CSFW_PATH . 'includes/class-csfw-plugin.php';
+require_once TEAMORE_PATH . 'includes/class-teamore-plugin.php';
 
-register_activation_hook( __FILE__, array( 'CSFW_Plugin', 'activate' ) );
+register_activation_hook( __FILE__, array( 'Teamore_Plugin', 'activate' ) );
 
 add_action(
 	'before_woocommerce_init',
@@ -38,4 +39,4 @@ add_action(
 	}
 );
 
-add_action( 'plugins_loaded', array( 'CSFW_Plugin', 'instance' ) );
+add_action( 'plugins_loaded', array( 'Teamore_Plugin', 'instance' ) );

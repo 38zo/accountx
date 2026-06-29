@@ -1,10 +1,10 @@
-=== Customer Subaccounts for WooCommerce ===
+=== TeaMore ===
 Contributors: lewisushindi
 Tags: woocommerce, subaccounts, b2b, customer accounts, teams
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -12,7 +12,7 @@ Create parent-managed WooCommerce subaccounts for teams, families, companies, an
 
 == Description ==
 
-Customer Subaccounts for WooCommerce helps your store feel easier to buy from when one customer needs more than one person involved.
+TeaMore helps your store feel easier to buy from when one customer needs more than one person involved.
 
 Some customers are not just one person. They are a purchasing team, a family, an office, a school, a branch, or a company account with people placing orders under the same relationship. This plugin gives those customers a simple way to create and manage subaccounts from WooCommerce My Account, while giving store admins clear visibility into who belongs to whom.
 
@@ -22,7 +22,7 @@ Use it to make repeat ordering smoother, reduce account confusion, and give your
 
 = Built for real customer relationships =
 
-Customer Subaccounts for WooCommerce is useful for stores that serve:
+TeaMore is useful for stores that serve:
 
 * Businesses with employees who place orders.
 * Schools, clubs, and organizations with multiple buyers.
@@ -60,9 +60,9 @@ Store admins can decide whether subaccounts are created by admins, customers, or
 
 == Installation ==
 
-1. Upload the `customer-subaccounts-for-woocommerce` folder to `/wp-content/plugins/`.
-2. Activate Customer Subaccounts for WooCommerce from the Plugins screen.
-3. Go to WooCommerce > Customer Subaccounts for WooCommerce.
+1. Upload the `teamore` folder to `/wp-content/plugins/`.
+2. Activate TeaMore from the Plugins screen.
+3. Go to WooCommerce > TeaMore.
 4. Review the subaccount settings and choose who can create subaccounts.
 5. If the My Account endpoint does not appear, visit Settings > Permalinks once to refresh rewrite rules.
 
@@ -102,11 +102,18 @@ The plugin declares compatibility with WooCommerce custom order tables.
 
 == Upgrade Notice ==
 
+= 1.0.1 =
+
+rename the plugin
+
 = 1.0.0 =
 
 Initial production release for parent-managed WooCommerce customer subaccounts.
 
 == Changelog ==
+
+= 1.0.1 =
+* rename the plugin
 
 = 1.0.0 =
 * Initial production release.
